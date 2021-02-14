@@ -3,14 +3,17 @@
 // Initialize pins
 void Motors::init(){
 
-  pinMode(PWMA, OUTPUT);
-  pinMode(AIN1, OUTPUT);
-  pinMode(AIN2, OUTPUT);
-  pinMode(PWMB, OUTPUT);
-  pinMode(BIN1, OUTPUT);
-  pinMode(BIN2, OUTPUT);
-  pinMode(STBY, OUTPUT);
-  digitalWrite(STBY,HIGH);
+ 
+  // left motor
+  pinMode(pwmL, OUTPUT);        // left motor power
+  pinMode(leftMotor1, OUTPUT);  // left motor dir.
+  pinMode(leftMotor2, OUTPUT);  // left motor dir.
+
+
+  // right motor
+  pinMode(pwmR, OUTPUT);        // right motor power
+  pinMode(rightMotor1, OUTPUT); // right motor dir.
+  pinMode(rightMotor2, OUTPUT); // right motor dir.
 
   
 }
@@ -22,20 +25,20 @@ void Motors::driveTank(float m1, float m2){
   m2 = min(max(m2, -100), 100);
 
   // Map powers
-  int powerOutA = m1 * (MOTOR_ABS_MAX / 100.0);
-  int powerOutB = m2 * (MOTOR_ABS_MAX / 100.0);
+  int powerOutL = m1 * (MOTOR_ABS_MAX / 100.0);
+  int powerOutR = m2 * (MOTOR_ABS_MAX / 100.0);
 
   // Set power
-  analogWrite(PWMA,powerOutA);
-  analogWrite(PWMB,powerOutB);
+  analogWrite(pwmL,powerOutL);
+  analogWrite(pwmR,powerOutR);
 
   // Set Directions
 
-  digitalWrite(AIN1, m1 > 0 ? LOW : HIGH);
-  digitalWrite(AIN2, m1 > 0 ? HIGH : LOW);
+  digitalWrite(leftMotor1, m1 > 0 ? LOW : HIGH);
+  digitalWrite(leftMotor2, m1 > 0 ? HIGH : LOW);
 
-  digitalWrite(BIN1, m2 > 0 ? LOW : HIGH);
-  digitalWrite(BIN2, m2 > 0 ? HIGH : LOW);
+  digitalWrite(rightMotor1, m2 > 0 ? LOW : HIGH);
+  digitalWrite(rightMotor2, m2 > 0 ? HIGH : LOW);
 }
 
 void Motors::driveTankforMillis(float m1, float m2,int milis){
@@ -48,35 +51,35 @@ void Motors::driveTankforMillis(float m1, float m2,int milis){
   int powerOutB = m2 * (MOTOR_ABS_MAX / 100.0);
 
   // Set power
-  //SoftPWMSetPercent(PWMA, abs(powerOutA));
-  //SoftPWMSetPercent(PWMB, abs(powerOutB));
-  //analogWrite(PWMA,abs(powerOutA));
- //analogWrite(PWMB,abs(powerOutB));
+  //SoftPWMSetPercent(pwmL, abs(powerOutA));
+  //SoftPWMSetPercent(pwmR, abs(powerOutB));
+  //analogWrite(pwmL,abs(powerOutA));
+ //analogWrite(pwmR,abs(powerOutB));
  // Set power (100)
-  //digitalWrite(PWMA, HIGH);
-  //digitalWrite(PWMB, HIGH);
+  //digitalWrite(pwmL, HIGH);
+  //digitalWrite(pwmR, HIGH);
   // Set Directions
-  digitalWrite(AIN1, m1 > 0 ? HIGH : LOW);
-  digitalWrite(AIN2, m1 > 0 ? LOW : HIGH);
+  digitalWrite(leftMotor1, m1 > 0 ? HIGH : LOW);
+  digitalWrite(leftMotor2, m1 > 0 ? LOW : HIGH);
 
-  digitalWrite(BIN1, m2 > 0 ? HIGH : LOW);
-  digitalWrite(BIN2, m2 > 0 ? LOW : HIGH);
+  digitalWrite(rightMotor1, m2 > 0 ? HIGH : LOW);
+  digitalWrite(rightMotor2, m2 > 0 ? LOW : HIGH);
  // delay(milis);
    // Set power (0)
-  //digitalWrite(PWMA, LOW);
-  //digitalWrite(PWMB, LOW);
+  //digitalWrite(pwmL, LOW);
+  //digitalWrite(pwmR, LOW);
   return;
 }
 
 void Motors::stop(){
   // Set power (0)
-  digitalWrite(PWMA, LOW);
-  digitalWrite(PWMB, LOW);
+  digitalWrite(pwmL, LOW);
+  digitalWrite(pwmR, LOW);
 
   // Set both DIRS to 0
-  digitalWrite(AIN1, HIGH);
-  digitalWrite(AIN2, HIGH);
+  digitalWrite(leftMotor1, HIGH);
+  digitalWrite(leftMotor2, HIGH);
 
-  digitalWrite(BIN1, HIGH);
-  digitalWrite(BIN2, HIGH);
+  digitalWrite(rightMotor1, HIGH);
+  digitalWrite(rightMotor2, HIGH);
 }

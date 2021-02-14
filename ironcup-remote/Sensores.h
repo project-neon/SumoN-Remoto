@@ -10,14 +10,10 @@ public:
 	
 	static void Serial();
 
-
-pinMode(Sensor1, INPUT); // Sensor1 is declared as input
-
 }
 
 
-int Sensor1=5; // Digital sensor connected to D5
-int SensorLeitura; // We define variable for storing sensor output.
+int Sensor1=5; // Digital sensor connected to D5 // We define variable for storing sensor output.
 
 void setup() {
 
