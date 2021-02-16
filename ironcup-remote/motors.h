@@ -1,4 +1,4 @@
-#include "_config.h"
+#include "config.h"
 
 #ifndef MOTORS_H
 #define MOTORS_H

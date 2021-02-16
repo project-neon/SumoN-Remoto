@@ -1,6 +1,3 @@
-config.h
-
-
 #include <Arduino.h>
 
 // LED
@@ -10,6 +7,8 @@ config.h
 #define pwmL 9
 #define leftMotor1 7
 #define leftMotor2 8
+// Motors config (H-Bridge)
+#define MOTOR_ABS_MAX          255
  
 // right motor
 #define pwmR 3

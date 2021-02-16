@@ -1,4 +1,4 @@
-#include "_config.h"
+#include "config.h"
 #include "motors.h"
 // Initialize pins
 void Motors::init(){
