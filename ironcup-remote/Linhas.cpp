@@ -13,7 +13,7 @@ void Linhas::init(){
 
 int Linhas::danger(){
      
-     int threshold = 650;
+     int threshold = 700;
 	 // line sensor
      if(analogRead(lineR)<threshold||analogRead(lineL)<threshold){
          return 0;

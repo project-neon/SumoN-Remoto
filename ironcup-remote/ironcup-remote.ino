@@ -10,6 +10,58 @@ int flag = 0;
 float LineL_read;
 float LineR_read;
 
+void MotorL(int pwm){
+  // leftMotor1=0 and leftMotor2=0 -> stopped / parado / parado 
+  // leftMotor1=0 and leftMotor2=1 -> moves forward / avanca / avanzar
+  // leftMotor1=1 and leftMotor2=0 -> moves back / recua / retrocede
+  // leftMotor1=1 and leftMotor2=1 -> stopped (braked) / parado (travado) / parado (frenado)
+ 
+  if(pwm==0){
+    digitalWrite(leftMotor1, LOW);
+    digitalWrite(leftMotor2, LOW);
+  }
+  else if(pwm<0)
+  {
+    analogWrite(pwmL, -pwm);
+    digitalWrite(leftMotor1, HIGH);
+    digitalWrite(leftMotor2, LOW);
+  }
+  else
+  {
+    analogWrite(pwmL, pwm);
+    digitalWrite(leftMotor1, LOW);
+    digitalWrite(leftMotor2, HIGH);
+  }
+}
+ 
+ 
+/**RIGHT MOTOR CONTROL / CONTROLE DO MOTOR DIREITO / CONTROL DEL MOTOR DERECHO**/
+// pwm = 0 -> stopped / parado / parado
+// 0<pwm<=255 -> forward / frente / adelante
+// -255<=pwm<0 -> backward / tras / espalda
+void MotorR(int pwm){
+  // rightMotor1=0 and rightMotor2=0 -> stopped / parado / parado 
+  // rightMotor1=0 and rightMotor2=1 -> moves forward / avanca / avanzar
+  // rightMotor1=1 and rightMotor2=0 -> moves back / recua / retrocede
+  // rightMotor1=1 and rightMotor2=1 -> stopped (braked) / parado (travado) / parado (frenado)
+ 
+  if(pwm==0){
+    digitalWrite(rightMotor1, LOW);
+    digitalWrite(rightMotor2, LOW);
+  }
+  else if(pwm<0)
+  {
+    analogWrite(pwmR, -pwm);
+    digitalWrite(rightMotor1, HIGH);
+    digitalWrite(rightMotor2, LOW);
+  }
+  else
+  {
+    analogWrite(pwmR, pwm);
+    digitalWrite(rightMotor1, LOW);
+    digitalWrite(rightMotor2, HIGH);
+  }
+}
 
 
 /*void setup {
@@ -29,31 +81,33 @@ float LineR_read;
 
 
 
-void Tornado(){
+void Tornado(){	
 
-	Motors::driveTank(100,100);
 	if(Linhas::danger()){
 		if(Dist::rightRead() && Dist::leftRead()){ // Taca-le pau Marcos
-			Motors::driveTank(100,100);
+			MotorL(255);
+			MotorR(255);
 		}
 
 		else if(Dist::rightRead() && !Dist::leftRead()){ // adjusting the direction
-			Motors::driveTank(0,50); // Confirmar a direcao
+			MotorR(175); // Confirmar a direcao
 			flag = 0;
 		}
 
 		else if(!Dist::rightRead() && Dist::leftRead()){  // adjusting the direction
-			Motors::driveTank(50,0); // Confirmar a direcao
+			MotorL(175); // Confirmar a direcao
 			flag = 1;
 		}
 
 		else{ // Looking for the enemy
-			flag == 1 ? Motors::driveTank(50,25) : Motors::driveTank(25,50); // 
+			flag == 1 ? MotorL(100) : MotorR(100); // 
 		}
 	}
 
 	else(Linhas::danger());{
-		Motors::driveTank(-100,-100);
+
+		MotorL(-255);
+		MotorR(-255);
 	}
 }
 
@@ -68,7 +122,7 @@ void setup() {
  	Linhas::init();
 
  	/***************INITIAL CONDITIONS***************** ----------inatel*/
- 	digitalWrite(LED, LOW); // LED off / LED desligado / LED apagado 
+ 	digitalWrite(LED, HIGH); // LED off / LED desligado / LED apagado 
  	Motors::stop(); // left motor stopped / motor esquerdo parado / motor izquierdo parado 
  	/*************INITIAL CONDITIONS - END*************/
 
@@ -83,6 +137,12 @@ void setup() {
 
 
 void loop() {
+
+	Motors::stop();
+	digitalWrite(LED,HIGH); 
+	delay(300);
+
+	digitalWrite(LED,LOW);
 	while (digitalRead(microST) == 1){
 
   	digitalWrite(LED, LOW); 
