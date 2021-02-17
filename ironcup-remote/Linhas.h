@@ -11,7 +11,7 @@ public:
   static void init();
 
   // verify if robot is at treshold white value
-  static int danger();
+  static int NotInDanger();
 
 };
 

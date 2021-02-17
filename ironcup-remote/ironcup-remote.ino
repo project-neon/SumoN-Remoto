@@ -22,6 +22,7 @@ void MotorL(int pwm){
   }
   else if(pwm<0)
   {
+	digitalWrite(LED,HIGH);
     analogWrite(pwmL, -pwm);
     digitalWrite(leftMotor1, HIGH);
     digitalWrite(leftMotor2, LOW);
@@ -51,6 +52,8 @@ void MotorR(int pwm){
   }
   else if(pwm<0)
   {
+
+	digitalWrite(LED,HIGH);
     analogWrite(pwmR, -pwm);
     digitalWrite(rightMotor1, HIGH);
     digitalWrite(rightMotor2, LOW);
@@ -83,19 +86,22 @@ void MotorR(int pwm){
 
 void Tornado(){	
 
-	if(Linhas::danger()){
+	if(Linhas::NotInDanger()){
+		digitalWrite(LED,LOW);
 		if(Dist::rightRead() && Dist::leftRead()){ // Taca-le pau Marcos
-			MotorL(255);
-			MotorR(255);
+			MotorL(200);
+			MotorR(200);
 		}
 
 		else if(Dist::rightRead() && !Dist::leftRead()){ // adjusting the direction
-			MotorR(175); // Confirmar a direcao
+			MotorR(175); 
+			MotorL(0);/// Confirmar a direcao
 			flag = 0;
 		}
 
 		else if(!Dist::rightRead() && Dist::leftRead()){  // adjusting the direction
-			MotorL(175); // Confirmar a direcao
+			MotorL(175);
+			MotorR(0); // Confirmar a direcao
 			flag = 1;
 		}
 
@@ -104,10 +110,10 @@ void Tornado(){
 		}
 	}
 
-	else(Linhas::danger());{
+	else(Linhas::NotInDanger());{
 
-		MotorL(-255);
-		MotorR(-255);
+		MotorL(-175);
+		MotorR(-175);
 	}
 }
 
@@ -130,7 +136,10 @@ void setup() {
   	while (digitalRead(microST) == 0)
   	{
   		digitalWrite(LED, HIGH);
-		Motors::driveTank(0,0);
+		delay(60);
+		digitalWrite(LED,LOW);
+		MotorL(0);
+		MotorR(0);
   	}
 }
 
@@ -138,11 +147,10 @@ void setup() {
 
 void loop() {
 
-	Motors::stop();
 	digitalWrite(LED,HIGH); 
-	delay(300);
 
 	digitalWrite(LED,LOW);
+
 	while (digitalRead(microST) == 1){
 
   	digitalWrite(LED, LOW); 

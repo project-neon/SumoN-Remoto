@@ -11,7 +11,7 @@ void Linhas::init(){
 
 }
 
-int Linhas::danger(){
+int Linhas::NotInDanger(){
      
      int threshold = 700;
 	 // line sensor
