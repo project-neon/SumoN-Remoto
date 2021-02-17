@@ -1,4 +1,6 @@
-#include "_config.h"
+
+#include "config.h"
+
 
 #ifndef DIST_H
 #define DIST_H
@@ -10,7 +12,8 @@ public:
   // Initialize pins
   static void init();
 
-  // Set power of both motors
+  // get value form sensors
+
   static int rightRead();
 
   static int leftRead();

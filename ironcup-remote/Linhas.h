@@ -1,4 +1,6 @@
-#include "_config.h"
+
+#include "config.h"
+
 
 #ifndef LINHAS_H
 #define LINHAS_H
@@ -10,8 +12,9 @@ public:
   // Initialize pins
   static void init();
 
-  // Set power of both motors
-  static int danger();
+  // verify if robot is at treshold white value
+  static int NotInDanger();
+
 
 };
 

@@ -1,8 +1,9 @@
-#include "_config.h"
+
+#include "config.h"
 #include "Dist.h"
 // Initialize pins
 
-void Dist::Init(){
+void Dist::init(){
 
 	// line sensor
     pinMode(SensorL, INPUT); // Sensor1 is declared as input
