@@ -10,6 +10,7 @@ int flag = 0;
 float LineL_read;
 float LineR_read;
 
+
 void MotorL(int pwm){
   // leftMotor1=0 and leftMotor2=0 -> stopped / parado / parado 
   // leftMotor1=0 and leftMotor2=1 -> moves forward / avanca / avanzar
@@ -70,6 +71,7 @@ void MotorR(int pwm){
 /*void setup {
 
 
+
 	Serial.begin(9600);
 	Serial.println("Setup Start...  ");
 	Motors::init();
@@ -115,6 +117,7 @@ void Tornado(){
 		MotorL(-175);
 		MotorR(-175);
 	}
+
 }
 
 

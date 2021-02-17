@@ -1,4 +1,6 @@
+
 #include "config.h"
+
 
 #ifndef DIST_H
 #define DIST_H
@@ -11,6 +13,7 @@ public:
   static void init();
 
   // get value form sensors
+
   static int rightRead();
 
   static int leftRead();
