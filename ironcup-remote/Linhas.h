@@ -1,4 +1,6 @@
+
 #include "config.h"
+
 
 #ifndef LINHAS_H
 #define LINHAS_H
@@ -12,6 +14,7 @@ public:
 
   // verify if robot is at treshold white value
   static int NotInDanger();
+
 
 };
 
