@@ -1,4 +1,3 @@
-
 #include "config.h"
 #include "Linhas.h"
 // Initialize pins

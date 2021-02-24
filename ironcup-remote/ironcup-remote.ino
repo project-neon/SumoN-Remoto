@@ -10,6 +10,18 @@ int flag = 0;
 float LineL_read;
 float LineR_read;
 
+int readDIP(){
+  int n=0;
+  if(digitalRead(DIP4)==HIGH)
+    n=1;
+  if(digitalRead(DIP3)==HIGH)
+    n|= (1<<1);
+  if(digitalRead(DIP2)==HIGH)
+    n|= (1<<2);
+  if(digitalRead(DIP1)==HIGH)
+    n|= (1<<3);
+  return n;
+}
 
 void MotorL(int pwm){
   // leftMotor1=0 and leftMotor2=0 -> stopped / parado / parado 
@@ -71,7 +83,6 @@ void MotorR(int pwm){
 /*void setup {
 
 
-
 	Serial.begin(9600);
 	Serial.println("Setup Start...  ");
 	Motors::init();
@@ -91,6 +102,7 @@ void newDriveTank(int a, int b){
 	MotorR(b);
 
 }
+
 
 void SeekLine(){
 
@@ -133,21 +145,26 @@ void SeekLine(){
 
 
 void motorTest(){
-	int speed = 200;
+	int speed = 100;
 
 	MotorL(speed);
 	MotorR(speed);
+	delay(500);
 
 	MotorL(-speed);
 	MotorR(-speed);
+	delay(500);
 
 	MotorL(-speed);
 	MotorR(speed);
+	delay(500);
 
 	MotorL(speed);
 	MotorR(-speed);
+	delay(500);
 
 }
+
 
 void dangerGuy(){
 	
@@ -188,21 +205,30 @@ void Tornado(){
 			MotorR(200);
 		}
 
-		else if(Dist::rightRead() && !Dist::leftRead()){ // adjusting the direction
-			MotorR(175); 
-			MotorL(0);/// Confirmar a direcao
-			flag = 0;
-		}
+		// else if(Dist::rightRead() && !Dist::leftRead()){ // adjusting the direction
+		// 	MotorR(150); 
+		// 	MotorL(0);/// Confirmar a direcao
+		// 	flag = 0;
+		// }
 
-		else if(!Dist::rightRead() && Dist::leftRead()){  // adjusting the direction
-			MotorL(175);
-			MotorR(0); // Confirmar a direcao
-			flag = 1;
-		}
+		// else if(!Dist::rightRead() && Dist::leftRead()){  // adjusting the direction
+		// 	MotorL(150);
+		// 	MotorR(0); // Confirmar a direcao
+		// 	flag = 1;
+		// }
 
 		else{ // Looking for the enemy
-			flag == 1 ? MotorL(100) : MotorR(100); // 
-		}
+			if(flag){
+				
+			MotorL(100);
+			MotorR(0); 
+	
+					}
+			else{
+			MotorR(100);
+			MotorL(0); 
+		
+			}
 	}
 
 	else(Linhas::NotInDanger());{
@@ -215,6 +241,11 @@ void Tornado(){
 		delay(60);
 	}
 
+	if(digitalRead(microST==0)){
+		MotorR(0);
+		MotorL(0); 
+
+	}
 }
 
 
@@ -237,7 +268,7 @@ void setup() {
 	MotorR(0);
   	while (digitalRead(microST) == 0)
   	{
-		if(millis() - times > 60 )
+		if((millis() - times) > 60 )
 		{	 
   			digitalWrite(LED, ledControl);
 			ledControl = !ledControl;
@@ -248,7 +279,6 @@ void setup() {
 }
 
 
-
 void loop() {
 
 
@@ -256,8 +286,16 @@ void loop() {
 
 	digitalWrite(LED,LOW);
 
-	int DIP_Result = (1)*(digitalRead(DIP1) == 1 ? 1 : 0)+(2)*(digitalRead(DIP2) == 1 ? 1 : 0)+(4)*(digitalRead(DIP3) == 1 ? 1 : 0)+(8)*(digitalRead(DIP4) == 1 ? 1 : 0);
-	
+	int DIP_Result = readDIP();
+
+	if(digitalRead(microST) == 1){
+		if(DIP_Result==1){
+			MotorL(100);
+			MotorR(200);
+			
+		}
+	}
+
 	/*MotorL(75);
 	MotorR(150);
 	delay(60);*/
@@ -268,12 +306,10 @@ void loop() {
     	 
     	switch (DIP_Result) {
          case 0:
-            Tornado();
+		  	dangerGuy();
             break;
           case 1:
 			//estratégia para quando robô começa na posição 5B
-            MotorL(100);
-			MotorR(200);
 			SeekLine();
             break;
 
