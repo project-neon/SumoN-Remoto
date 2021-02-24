@@ -1,4 +1,3 @@
-
 #include "config.h"
 #include "Linhas.h"
 // Initialize pins
@@ -16,7 +15,9 @@ void Linhas::init(){
 
 int Linhas::NotInDanger(){
      
-     int threshold = 700;
+
+     int threshold = 800;
+
 
 	 // line sensor
      if(analogRead(lineR)<threshold||analogRead(lineL)<threshold){
