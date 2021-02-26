@@ -103,32 +103,63 @@ void newDriveTank(int a, int b){
 
 }
 
+void SoVaiMonstroSlk(){
+
+	if(Linhas::NotInDanger()){
+		
+		MotorL(250);
+		MotorR(250);
+
+	}
+
+	else{
+
+		MotorL(-175);
+		MotorR(-175);
+		delay(100);
+		MotorL(175);
+		MotorR(-175);
+		delay(60);
+	}
+
+}
+
 
 void SeekLine(){
 
 	if(Linhas::NotInDanger()){
-
 		digitalWrite(LED,LOW);
-		if(Dist::rightRead() && Dist::leftRead()){ // Taca-le pau Marcos
-			MotorL(200);
-			MotorR(200);
+		if((digitalRead(SensorR)) && (digitalRead(SensorL))){ // Taca-le pau Marcos
+			MotorL(150);
+			MotorR(150);
 		}
 
-		else if(Dist::rightRead() && !Dist::leftRead()){ // adjusting the direction
-			MotorR(175); 
+		else if((digitalRead(SensorR)) && (!digitalRead(SensorL))){ // adjusting the direction
+			MotorR(100); 
 			MotorL(0);/// Confirmar a direcao
 			flag = 0;
 		}
 
-		else if(!Dist::rightRead() && Dist::leftRead()){  // adjusting the direction
-			MotorL(175);
+		else if((!digitalRead(SensorR)) && (digitalRead(SensorL))){  // adjusting the direction
+			MotorL(100);
 			MotorR(0); // Confirmar a direcao
 			flag = 1;
 		}
 
-		else{ // Looking for the enemy/next line
-			flag == 1 ? newDriveTank(150,75) : newDriveTank(75,150); // 
+		else{ // Looking for the enemy
+			if(flag){
+				
+			MotorL(50);
+			MotorR(0); 
+	
+					}
+			else{
+			MotorR(50);
+			MotorL(0); 
+		
+			}
 		}
+
 	}
 
 	else{
@@ -200,46 +231,46 @@ void Tornado(){
 
 	if(Linhas::NotInDanger()){
 		digitalWrite(LED,LOW);
-		if(Dist::rightRead() && Dist::leftRead()){ // Taca-le pau Marcos
+		if((digitalRead(SensorR)) && (digitalRead(SensorL))){ // Taca-le pau Marcos
 			MotorL(200);
 			MotorR(200);
 		}
 
-		// else if(Dist::rightRead() && !Dist::leftRead()){ // adjusting the direction
-		// 	MotorR(150); 
-		// 	MotorL(0);/// Confirmar a direcao
-		// 	flag = 0;
-		// }
+		else if((digitalRead(SensorR)) && (!digitalRead(SensorL))){ // adjusting the direction
+			MotorR(150); 
+			MotorL(0);/// Confirmar a direcao
+			flag = 0;
+		}
 
-		// else if(!Dist::rightRead() && Dist::leftRead()){  // adjusting the direction
-		// 	MotorL(150);
-		// 	MotorR(0); // Confirmar a direcao
-		// 	flag = 1;
-		// }
+		else if((!digitalRead(SensorR)) && (digitalRead(SensorL))){  // adjusting the direction
+			MotorL(150);
+			MotorR(0); // Confirmar a direcao
+			flag = 1;
+		}
 
 		else{ // Looking for the enemy
 			if(flag){
 				
-			MotorL(100);
-			MotorR(0); 
+			MotorL(100); 
 	
 					}
 			else{
 			MotorR(100);
-			MotorL(0); 
 		
 			}
-	}
+		}
 
-	else(Linhas::NotInDanger());{
-
-		MotorL(-175);
-		MotorR(-175);
-		delay(100);
-		MotorL(175);
-		MotorR(-175);
-		delay(60);
 	}
+	
+	// else(Linhas::NotInDanger());{
+
+	// 	MotorL(-175);
+	// 	MotorR(-175);
+	// 	delay(100);
+	// 	MotorL(175);
+	// 	MotorR(-175);
+	// 	delay(60);
+	// }
 
 	if(digitalRead(microST==0)){
 		MotorR(0);
@@ -306,7 +337,7 @@ void loop() {
     	 
     	switch (DIP_Result) {
          case 0:
-		  	dangerGuy();
+		  	Tornado();
             break;
           case 1:
 			//estratégia para quando robô começa na posição 5B
@@ -314,11 +345,15 @@ void loop() {
             break;
 
 		  case 2:
-		  	motorTest();
+		  	SoVaiMonstroSlk();
         	break;
         
 		  case 3:
 		  	dangerGuy();
+			break;
+
+		  case 4:
+		  	motorTest();
 			break;
 
 		  default:

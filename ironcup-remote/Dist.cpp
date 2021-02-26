@@ -1,4 +1,3 @@
-
 #include "config.h"
 #include "Dist.h"
 // Initialize pins
@@ -13,14 +12,12 @@ void Dist::init(){
 
 int Dist::rightRead(){
 
-	 // line sensor
   return(digitalRead(SensorR)); // DO NOT CHANGE / NAO MUDAR / NO CAMBIAR
   
 }
 
 int Dist::leftRead(){
 
-	 // line sensor
   return(digitalRead(SensorL)); // DO NOT CHANGE / NAO MUDAR / NO CAMBIAR
   
 }
