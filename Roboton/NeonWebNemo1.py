@@ -3,8 +3,26 @@ flag = 0 # 0 left | 1 right
 MAX_SPEED = 40
 NORMAL_SPEED = 35
 
+def searchEngine(distance_right, distance_left):
+    if distance_right < 300 and distance_left == 300:
+        # Opponent to the right => Turn right
+        leftSpeed  =  20;
+        rightSpeed = -20;
+    elif distance_right==300 and distance_left<300:
+        # Opponent to the left => Turn left
+        leftSpeed  = -20;
+        rightSpeed =  20;
+    elif distance_right<300 and distance_left<300:
+        # Opponent in front => Don't turn
+        leftSpeed  = 0;
+        rightSpeed = 0;
+    elif distance_right==300 and distance_left==300:
+        # Opponent lost => Search to the right
+        leftSpeed  =  20;
+        rightSpeed = -20;
+
 def not_in_danger(front_right, front_left):
-    return not (front_right > 0 or front_left > 0)
+    return (front_right == 0 or front_left == 0)
 
 
 def control(front_right, front_left, back_right, back_left, distance_right, distance_left):
@@ -17,12 +35,15 @@ def control(front_right, front_left, back_right, back_left, distance_right, dist
             left_speed = MAX_SPEED
             right_speed = MAX_SPEED
         elif ( (distance_right < 300) ):
+            left_speed = MAX_SPEED
             right_speed = NORMAL_SPEED
             flag = 1
         elif ( (distance_left < 300) ):
             left_speed = NORMAL_SPEED
-            flag = 1
+            right_speed = MAX_SPEED
+            flag = 0
         else:
+            searchEngine(distance_right, distance_left)
             left_speed = NORMAL_SPEED if flag == 0 else 0
             right_speed = NORMAL_SPEED if flag == 1 else 0
     else:
@@ -32,10 +53,5 @@ def control(front_right, front_left, back_right, back_left, distance_right, dist
     return {
         'leftSpeed': left_speed,
         'rightSpeed': right_speed,
-        'log': [
-            { 'name': 'Front Left',  'value':   front_left,    'min': 0, 'max': 1 },
-            { 'name': 'Front Right', 'value':   front_right,   'min': 0, 'max': 1 },
-            { 'name': 'Distance Left', 'value': distance_left, 'min': 0, 'max': 300 },
-            { 'name': 'Distance Right', 'value': distance_right, 'min': 0, 'max': 300 },
-        ]
+        'log': [  ]
     }
