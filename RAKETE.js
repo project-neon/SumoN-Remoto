@@ -1,67 +1,29 @@
-//V9
-var speedL, speedR;
-var speed = 45;
-var mem = 'r'; // m -> mid     r -> right     l -> left
+//V10
 var inicio = 0;
-
+var left_speed, right_speed;
+var speed = 45;
 function control(front_right, front_left, back_right, back_left, distance_right, distance_left) {
-    var sensorR = distance_right;
-    var sensorL = distance_left;
-    
-    var error = 0 - (sensorL - sensorR);
-    
-    speedR = speed * (error/300);
-    speedL = speed * (error/300) * (-1);
-    
-    if(Math.abs(error) <= 10 && (sensorR < 300 && sensorL < 300)){
-        mem = 'm';
-    }else if (error > 0){
-        mem = 'l';
-    }else if (error < 0){
-        mem = 'r';
-    }else{
-        speedR = speed * -0.2;
-        speedL = speed * 0.9;
+
+   if(back_left > 0.8){
+        right_speed = speed*0.9;
+        left_speed = speed*0.9;
+        inicio = 1;
+    }else if(inicio === 0 ){
+        left_speed = speed * -0.9;
+        right_speed = speed * -0.9;
+    }else if (front_right > 0.8){
+        left_speed = speed*-0.8;
+        right_speed = speed*0.8;
+    }else if(front_left > 0.8){
+        right_speed = speed*-0.8;
+        left_speed = speed*0.8;
+    }else if(distance_left < 300){
+        right_speed = speed*0.9;
+        left_speed = speed*0.85;
+    }else if(distance_right < 300){
+        left_speed = speed*0.9;
+        right_speed = speed*0.85;
     }
     
-    switch (mem){
-            
-        case 'l':
-            speedR = speed * 0.8;
-            speedL = speed * 0.2;
-            break;
-        case 'r':
-            speedL = speed * 0.8;
-            speedR = speed * 0.2;
-            break;
-        case 'm':
-            speedR = speed * 0.9;
-            speedL = speed * 0.9;
-            break;
-        default: break;
-    }
-    
-  
-    
-    
-    if(front_left > 0.8 || front_left > 0.8){
-        speedR = speed*-0.5;
-        speedL = speed*-0.9;
-    }
-    
-    if(inicio < 25){
-        speedR = speed * -0.9;
-        speedL = speed * -0.15;
-        inicio++;
-    }
-    return {
-        leftSpeed: speedL,
-        rightSpeed: speedR,
-        /*log : [
-            {name: 'Left',  value: left_speed, min: -45, max: 45},
-            {name: 'Right', value: right_speed, min: -45, max: 45},
-            {name: 'LeftDist', value: distance_left, min: 0, max: 300},
-            {name: 'RightDist', value: distance_right, min: 0, max: 300}
-        ]*/
-    };
+    return { leftSpeed: left_speed,    rightSpeed: right_speed,   };
 }
