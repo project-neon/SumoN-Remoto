@@ -1,4 +1,4 @@
-//V4
+//V5
 var inicio = 0;
 var left_speed, right_speed;
 var speed = 45;
@@ -8,26 +8,24 @@ function control(front_right, front_left, back_right, back_left, distance_right,
         left_speed = speed;
         right_speed = speed;
         inicio = 1;
-    }else if(inicio == 0){
+        
+    }else if(inicio == 0 && (distance_left==300 && distance_right==300)){
         right_speed = -speed*0.9;
         left_speed = -speed*0.6;
-    }else if (front_right > 0){
+        
+    }else if (front_right > 0 || front_left > 0){
         left_speed = speed*0.9;
         right_speed = speed*-0.9;
         inicio = 1;
-    }else if(front_left > 0){
-        right_speed = speed*0.4;
-        left_speed = speed*-0.9;
-        inicio = 1;
+        
     }else if((distance_left < 300 && distance_right < 300) && ((distance_left-distance_right) < 10)){
         right_speed = speed*0.9;
         left_speed = speed*0.9;
-    }else if(distance_left < 300){
+        
+    }else if(distance_left < 300 || distance_right < 300){
         right_speed = speed*0.8;
         left_speed = speed*0.8;
-    }else if(distance_right < 300){
-        left_speed = speed*0.8;
-        right_speed = speed*0.8;
+        
     }else if((Math.abs(distance_right - distance_left))<=20){
         left_speed = speed*0.6;
         right_speed = speed*-0.5;
