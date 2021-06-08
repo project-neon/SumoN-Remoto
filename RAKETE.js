@@ -1,51 +1,37 @@
-//V7
-var left_speed, right_speed;   //variáveis usadas para atribuir valores aos motores das rodas.
-var speed = 45;                //valor máximo da velocidde;                
-var count = 30;                //contador inicial de tempo  (tempo real=count/60)
-
-
+//V8
+var inicio = 0;
+var left_speed, right_speed;
+var speed = 45;
 function control(front_right, front_left, back_right, back_left, distance_right, distance_left) {
     
+    var error = 0 - (distance_left - distance_right);
     
-    // vai pra trás no inicio por 0,5 segundo
-    // estratégia para sair do campo de visão inicialmente
-    if (count>0 && (distance_right-distance_left)==0){
-        left_speed = speed*-0.8;
-        right_speed = speed*-0.7;
-        count = count - 1;
-    }
-    
-    //ao terminar a contagem, verifica se chegou na borda e começa a procurar o adversário
-    else if(back_left > 0){
-        right_speed = speed*0.5;
-        left_speed = speed*0.8;
-    }else if(back_right > 0){
-        left_speed = speed*0.5;
-        right_speed = speed*0.8;
-    }else if(front_right > 0){
-        left_speed = speed * -0.8;
-        right_speed = speed * 0.8;
-    }else if(front_left > 0){
-        left_speed = speed * 0.8;
-        right_speed = speed * -0.8;
-    }
-    
-    //quando encontra algum adversário, gira para o lado em que ele está.
-    else if(distance_left < 300){
-        right_speed = speed*0.9;
-        left_speed = speed*0.7;
-    }else if(distance_right < 300){
+        
+    if (front_right > 0.8 || front_left > 0.8){
         left_speed = speed*0.9;
-        right_speed = speed*0.7;
+        right_speed = speed*-0.9;
+        
+    }else if(Math.abs(error) <= 10 && distance_left < 300){
+        right_speed = speed;
+        left_speed = speed;
+        
+    }else if(error>0){
+        right_speed = 0.9*speed*(error/300);
+        left_speed = 0.9*speed*(error/300);
+        
+    }else if(error<0){
+        error = Math.abs(error);
+        right_speed = 0.9*speed*(error/300);
+        left_speed = 0.9*speed*(error/300);
+        
+    }else if(distance_left < 300 || distance_right < 300){
+        right_speed = speed*0.8;
+        left_speed = speed*0.8;
+        
+    }else if((Math.abs(error))<=20){
+        left_speed = speed*0.7;
+        right_speed = speed*-0.1;
     }
-    
-    //se não encontra nenhum inimigo, gira em seu próprio eixo procurando o adversário
-    else if((Math.abs(distance_right - distance_left))<=1){
-        left_speed = speed*0.6;
-        right_speed = speed*-0.3;
-    }
-    
-    //outpus
     return {
         leftSpeed: left_speed,
         rightSpeed: right_speed,
