@@ -55,12 +55,18 @@ def not_in_danger(front_right, front_left, distance_right, distance_left):
 def control(front_right, front_left, back_right, back_left, distance_right, distance_left):
     
     global counter, inicio, flag, MAX_SPEED, NORMAL_SPEED
-        
-    if counter >= 0: #Time counter function, might come in handy
-        counter += 1
     
-    #Initial retreat conditions block for maneuvering
-    if back_left > 0: 
+     #Time counter function, might come in handy || descontinuada  
+   # if counter >= 25: 
+    #    counter += 1
+    
+    ###Initial retreat conditions block for maneuvering###
+    if (counter < 25): #time-frames for reaching edge // frames-de-tempo para alcançar a borda
+        right_speed = -MAX_SPEED
+        left_speed = -MAX_SPEED
+        counter += 1
+   
+    elif back_left > 0: 
             right_speed = MAX_SPEED*0.5
             left_speed = MAX_SPEED*0.8
             inicio = 1
@@ -70,16 +76,19 @@ def control(front_right, front_left, back_right, back_left, distance_right, dist
             right_speed = MAX_SPEED*0.8
             inicio = 1
             
-    elif inicio == 0:
-            right_speed = -MAX_SPEED
-            left_speed = -MAX_SPEED
-    # Current maneuver: retreat and reposition            
+    #alternative begin strategy, discontinued
+    #elif inicio == 0:
+       #     right_speed = -MAX_SPEED
+        #    left_speed = -MAX_SPEED
+    
+    ###Current maneuver: retreat and reposition###
     
     # Everything is fine, so it will search for the enemy and attack it
-    elif (not_in_danger(front_right, front_left)):
+    elif (not_in_danger(front_right, front_left, distance_right, distance_left)):
         left_speed, right_speed = searchEngine(distance_right, distance_left)
     else:
-    # The robot is in danger, so it got to go back with all speed (reverse)    
+    # The robot is in danger, so it got to go back with all speed (reverse) 
+    # // O robô está em perigo, então irá recuar 
 
         left_speed, right_speed  = -MAX_SPEED, -MAX_SPEED
         
