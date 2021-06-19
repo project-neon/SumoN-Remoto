@@ -1,50 +1,46 @@
-############ ------------ VERSION 07 ------------ ############
+############ ------------ VERSION 08 ------------ ############
 
 ############ --------- START VARIABLES --------- ############
-count = 30        #initial time counter (real time --> 'count'/60)
+inicio = 0
 left_speed = 0
 right_speed = 0
 speed = 45
+error = 0
 
 ############ --------- START OF THE PROGRAM --------- ############
 def control(front_right, front_left, back_right, back_left, distance_right, distance_left):
  
-    global count, left_speed, right_speed, speed
+    global count, left_speed, right_speed, speed, error
     
-    #initial condition, the robot goes back for 0,5 seconds   
-    if count > 0 and (distance_left-distance_right) == 0:
-        right_speed = speed*-0.7
-        left_speed = speed*-0.8
-        count -= 1
+    error = 0 - (distance_left-distance_right)
         
-    #checks if the robot has reached the edge by the 'back_sensor'    
-    elif back_left > 0:
-        left_speed = speed*0.8
-        right_speed = speed*0.5
-    elif back_right > 0:
-        left_speed = speed*0.5
-        right_speed = speed*0.8
-    
     #checks if the robot has reached the edge by the 'front_sensor'    
-    elif front_right > 0:
-        left_speed = speed*-0.8
-        right_speed = speed*0.8
-    elif front_left > 0:
-        left_speed = speed*0.8
-        right_speed = speed*-0.8
+    if front_right > 0.8 or front_left > 0.8:
+        left_speed = speed*0.9
+        right_speed = speed*-0.9
         
     #rotates to the side where the enemy is
-    elif distance_left < 300:
-        right_speed = speed*0.9
-        left_speed = speed*0.7
-    elif distance_right < 300:
-        right_speed = speed*0.7
-        left_speed = speed*0.9
+    elif abs(error) <= 10 and distance_left < 300:
+        right_speed = speed*1.0
+        left_speed = speed*1.0
+        
+    elif error > 0:
+        right_speed = 0.9*speed*(error/300)
+        left_speed = 0.45*speed*(error/300)
+        
+    elif error < 0:
+        error = abs(error)
+        right_speed = 0.45*speed*(error/300)
+        left_speed = 0.9*speed*(error/300)
+        
+    elif distance_left < 300 or distance_right < 300:
+        right_speed = speed*0.8
+        left_speed = speed*0.8
         
     #search for the enemy    
-    elif(abs(distance_right - distance_left))<=1:
-        left_speed = speed*0.6
-        right_speed = speed*-0.3
+    elif(abs(error))<=20:
+        left_speed = speed*0.7
+        right_speed = speed*-0.1
     
     #outputs
     return {
