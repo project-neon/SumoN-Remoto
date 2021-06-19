@@ -1,4 +1,4 @@
-############ ------------ VERSION 02 ------------ ############
+############ ------------ VERSION 03 ------------ ############
 
 ############ --------- START VARIABLES --------- ############
 inicio = 0
@@ -13,26 +13,28 @@ def control(front_right, front_left, back_right, back_left, distance_right, dist
     
     #checks if the robot has reached the edge by the 'back_sensor'
     if back_left > 0 :
-        right_speed = speed*-0.9
+        right_speed = speed*0.4
         left_speed = speed*0.8
         inicio = 1
+    elif back_right > 0 :
+        right_speed = speed*0.7
+        left_speed = speed*-0.7
+        inicio = 1    
         
     #initial condition, the robot goes back    
     elif inicio == 0:
         right_speed = -speed*0.9
-        left_speed = -speed*0.6
+        left_speed = -speed*0.9
         
     #checks if the robot has reached the edge by the 'front_sensor'    
     elif front_right > 0:
-        left_speed = speed*0.8
-        right_speed = speed*-0.9
-        inicio = 1
+        left_speed = speed*-0.8
+        right_speed = speed*-0.7
     elif front_left > 0:
-        right_speed = speed*-0.9
-        left_speed = speed*0.7
-        inicio = 1
+        right_speed = speed*-0.8
+        left_speed = speed*-0.7
         
-    #checks which side the enemy is on    
+#checks which side the enemy is on    
     elif distance_left < 300:
         right_speed = speed*0.9
         left_speed = speed*0.5
