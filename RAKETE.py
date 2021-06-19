@@ -34,18 +34,18 @@ def control(front_right, front_left, back_right, back_left, distance_right, dist
         right_speed = speed*-0.8
         left_speed = speed*-0.7
         
-#checks which side the enemy is on    
+    #Go forward when you spot the enemy    
     elif distance_left < 300:
         right_speed = speed*0.9
-        left_speed = speed*0.5
+        left_speed = speed*0.9
     elif distance_right < 300:
         left_speed = speed*0.9
-        right_speed = speed*0.5
+        right_speed = speed*0.9
         
     #search for the enemy    
     elif(abs(distance_right - distance_left))<=20:
         left_speed = speed*0.9
-        right_speed = speed*0.7
+        right_speed = speed*0.0
     
     #outputs
     return {
