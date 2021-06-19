@@ -19,29 +19,31 @@ def control(front_right, front_left, back_right, back_left, distance_right, dist
         
     #initial condition, the robot goes back    
     elif inicio == 0:
-        right_speed = -speed*0.8
+        right_speed = -speed*0.9
         left_speed = -speed*0.6
         
     #checks if the robot has reached the edge by the 'front_sensor'    
     elif front_right > 0:
-        left_speed = speed*-0.8
-        right_speed = speed*-0.7
+        left_speed = speed*0.8
+        right_speed = speed*-0.9
+        inicio = 1
     elif front_left > 0:
-        right_speed = speed*-0.8
-        left_speed = speed*-0.7
+        right_speed = speed*-0.9
+        left_speed = speed*0.7
+        inicio = 1
         
     #checks which side the enemy is on    
     elif distance_left < 300:
         right_speed = speed*0.9
-        left_speed = speed*0.9
+        left_speed = speed*0.5
     elif distance_right < 300:
         left_speed = speed*0.9
-        right_speed = speed*0.9
+        right_speed = speed*0.5
         
     #search for the enemy    
     elif(abs(distance_right - distance_left))<=20:
-        left_speed = speed*0.8
-        right_speed = speed*-0.0
+        left_speed = speed*0.9
+        right_speed = speed*0.7
     
     #outputs
     return {
