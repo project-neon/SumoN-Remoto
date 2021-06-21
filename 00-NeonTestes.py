@@ -13,20 +13,22 @@ NORMAL_SPEED = 35
 def searchEngine(distance_right, distance_left):
     global flag, MAX_SPEED, NORMAL_SPEED
     
-        if distance_right < 300 and distance_left == 300:
+    if distance_right < 300 and distance_left == 300:
         # Opponent to the right => Turn right
-        left_speed  =  MAX_SPEED*0.9
-        right_speed =  NORMAL_SPEED*0.9
+        left_speed  =  MAX_SPEED*0.6
+        right_speed =  NORMAL_SPEED*0.6
         flag = 1
     elif distance_right == 300 and distance_left < 300:
         # Opponent to the left => Turn left
-        left_speed  =  NORMAL_SPEED*0.9
-        right_speed =  MAX_SPEED*0.9
+        left_speed  =  NORMAL_SPEED*0.6
+        right_speed =  MAX_SPEED*0.6
         flag = 0
+        
     elif distance_right < 300 and distance_left < 300:
         # Opponent in front => Go
-        left_speed  = MAX_SPEED
-        right_speed = MAX_SPEED
+        left_speed  = MAX_SPEED*100
+        right_speed = MAX_SPEED*100
+        
     else:# Lost the opponent
         if flag == 0: #Last time seen was to the left
             left_speed  = 0
