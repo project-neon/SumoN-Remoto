@@ -1,4 +1,4 @@
-flag = 1 # 0 left | 1 right, Nos diz para onde o inimigo foi
+flag = 1 # 0 left | 1 right, Tell us where the enemy has gone
 best_eye = 1
 turn_side = 1
 search_state = True
@@ -70,7 +70,7 @@ def ole_mode(distance_right, distance_left):
 
 def attack_mode(front_right, front_left, distance_right, distance_left,back_left):
     global flag
-    # Se identificar a borda branca => Recua
+    # Identify the white border => Draw back
     if front_left > 0.8 or front_right > 0.8:
         leftSpeed  = -40
         rightSpeed = -40
@@ -78,24 +78,24 @@ def attack_mode(front_right, front_left, distance_right, distance_left,back_left
     elif back_left > 0.25:
         leftSpeed = 30
         rightSpeed =-30
-    # Oponente na direita => Vira pra direita    
+    # Opponent on the right => Turn Right    
     elif distance_right < 300 and distance_left == 300:
         leftSpeed  =  35
         rightSpeed =  0
-    # Oponente na esquerda => Vira esquerda
+    # Opponent on the left => Turn Left
     elif distance_right == 300 and distance_left < 300:
         leftSpeed  = 0
         rightSpeed = 35
-    # Oponente na frente => Ataque    
+    # Opponent in front=> Attack   
     elif distance_right < 300 and distance_left < 300:
         leftSpeed  = 40
         rightSpeed = 40
-    # Oponente perdido => Procurar o oponente
-    else:# Perdeu o oponente
-        if flag == 0: # Visto pela última vez à esquerda
+    # Opponent lost => Look for the opponent
+    else:# Lost the opponent
+        if flag == 0: # Last seen on the left
             leftSpeed  = -10
             rightSpeed = 35
-        else: #Visto pela última vez à direita
+        else: #Last seen on the right
             leftSpeed  = 35
             rightSpeed = -10
             
