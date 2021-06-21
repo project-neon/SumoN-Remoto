@@ -39,17 +39,16 @@ def searchEngine(distance_right, distance_left):
 ###((function below: "retreat or kamikaze"))###
 # Will see if the sensor of the robot is above the white line (borders) // checa se está na linha branca
 # Will return True or False // retorna verdadeiro ou falso
-def not_in_danger(front_right, front_left, distance_right, distance_left):
-   
-     if ((distance_right < 250) or  (distance_left < 250)): #kamikaze god of typhoon // deus dos ciclones 
-        return (1) 
-   #if (front_right == 0 and front_left == 0):
-       # return (front_right == 0 or front_left == 0)
-     elif(front_right < 0.8 and front_left < 0.8): #check if it's safe // checar se está seguro
+
+
+# Will see if the sensor of the robot is above the white line (borders) // checa se está na linha branca
+# Will return True or False // retorna verdadeiro ou falso
+def not_in_danger(front_right, front_left, back_right, back_left):
+
+    if(front_right < 0.8 and front_left < 0.8): #check if it's safe // checar se está seguro
         
-        return (front_right < 0.8 and front_left < 0.8) 
-    
-    # elif(back_right < 0.8 and back_left < 0.8):
+        return (True) 
+
 
 # Main function that will loop 60 times in a second
 def control(front_right, front_left, back_right, back_left, distance_right, distance_left):
