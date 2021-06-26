@@ -6,10 +6,9 @@ inicio = 0
 MAX_SPEED = 40
 NORMAL_SPEED = 35
 
+#Will search for the opponent rotating, and after finding it, 
+#it will go straight
 
-#Function below: Will search for the opponent rotating, 
-#and after finding it, the robot will go straight 
-## // função de procura rodando no próprio eixo, ataca a frente se há detecção
 
 def searchEngine(distance_right, distance_left):
     global flag, MAX_SPEED, NORMAL_SPEED
@@ -39,6 +38,10 @@ def searchEngine(distance_right, distance_left):
             right_speed = 0
     return left_speed, right_speed
 
+###((function below: "retreat or kamikaze"))###
+# Will see if the sensor of the robot is above the white line (borders) // checa se está na linha branca
+# Will return True or False // retorna verdadeiro ou falso
+
 
 # Will see if the sensor of the robot is above the white line (borders) // checa se está na linha branca
 # Will return True or False // retorna verdadeiro ou falso
@@ -49,7 +52,7 @@ def not_in_danger(front_right, front_left, back_right, back_left):
         return (True) 
 
 
-# Main function that will loop 60 times in a second // função principal rodará 60 frames por segundo
+# Main function that will loop 60 times in a second
 def control(front_right, front_left, back_right, back_left, distance_right, distance_left):
     
     global counter, inicio, flag, MAX_SPEED, NORMAL_SPEED
@@ -58,7 +61,7 @@ def control(front_right, front_left, back_right, back_left, distance_right, dist
    # if counter >= 25: 
     #    counter += 1
     
-    ###Initial retreat conditions block for maneuvering### // condição inicial de retirada ("ré")
+    ###Initial retreat conditions block for maneuvering###
     if (counter < 25): #time-frames for reaching edge // frames-de-tempo para alcançar a borda
         right_speed = -MAX_SPEED
         left_speed = -MAX_SPEED
