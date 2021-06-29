@@ -4,8 +4,6 @@ motor_esq = 0
 count=0
 rampa = True
 
-
-
 def control(front_right, front_left, back_right, back_left, distance_right, distance_left):
     global motor_dir
     global motor_esq
@@ -29,30 +27,20 @@ def control(front_right, front_left, back_right, back_left, distance_right, dist
             motor_dir = 40
             motor_esq = -5
         elif distance_right < 300 and distance_left < 300: #acelera os dois lados
-            motor_dir = 40
-            motor_esq = 40
-    elif front_right == 0.25 and front_left == 0.25:  ## tá em cima do outro
-        motor_dir = -40
-        motor_esq = 20   
-    elif front_right == 0.25 and front_left < 0.25:  ## tá em cima so direita
-        motor_dir = 40
-        motor_esq = -20   
-    elif front_right < 0.25 and front_left == 0.25:  ## tá em cima so esquerda
-        motor_dir = -20
-        motor_esq = 40 
-    
-    elif back_right == 0.25 and back_left < 0.25:  ## tá em cima so direita
-        motor_dir = 40
-        motor_esq = -20   
-    elif back_right < 0.25 and back_left == 0.25:  ## tá em cima so esquerda
-        motor_dir = -20
-        motor_esq = 40 
-    elif back_right == 0.25 and back_left == 0.25:  ## tá em cima do outro
-        motor_dir = -40
-        motor_esq = -40
-    elif back_right == 0.25 and back_left == 0.25 and front_right == 0.25 and front_left == 0.25:
-        motor_dir = 0
+            if distance_left < 16:
+                motor_dir = 40
+                motor_esq = -40  
+            else:
+                motor_dir = 40
+                motor_esq = 40
+        
+   
+    elif back_right == 0.25 or back_left == 0.25: ## foge na borda se oponente empurra
+        motor_dir = 35
         motor_esq = 40
+         
+        
+    
     else:
         motor_dir = 0
         motor_esq = 40
