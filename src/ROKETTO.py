@@ -12,7 +12,7 @@ speed = 40                ##//speed MAX set point
 enemyPos = 1              ##//memory of enemy's position, 0=left, 1=center, 2=right
 last = 1                  ##//last enemy's position memory
 count = 1                 ##//counter
-strategy = 2              ##//selected strategy
+strategy = 0              ##//selected strategy
 error = 0                 ##//error for strategy #2
 action = 0                ##//action to complement strategy #2
 
@@ -21,7 +21,7 @@ def control(front_right, front_left, back_right, back_left, distance_right, dist
     global inicio, left_speed, right_speed, speed, enemyPos, last, count, strategy, error, action
     
     if inicio == 's' : 
-        strategy = random.randint(1,2)
+        strategy = random.randint(1,3)
         inicio = 'r'       
     
     
@@ -120,7 +120,7 @@ def control(front_right, front_left, back_right, back_left, distance_right, dist
                 left_speed = speed*1.0
                 right_speed = speed*-1.0
             
-        count=1+count
+        count += 1
 
         
 #####  #####  ####   #####  #####  #####  #####  #   #  #####
@@ -160,23 +160,27 @@ def control(front_right, front_left, back_right, back_left, distance_right, dist
                 error = -300 
             else :
                 ##//search for the enemy
-                right_speed = speed*-1.0
-                left_speed = speed*1.0
+                right_speed = speed * 0.0
+                left_speed = speed * 1.0
         
         
         last = enemyPos    ##//capture the last enemy's position     
         
         
+        ##//Check the back's sensors
+        if (back_right > 0.9 or back_left > 0.9) and action != 'ok':
+            right_speed = speed * 1.0
+            left_speed = speed * 1.0
         ##//Check the front_left sensor
-        if front_left > 0.3 and action != 'ok' :
+        if front_left > 0.9 and action != 'ok' :
             right_speed = speed * -1.0
             left_speed = speed * -1.0
-            action = 0
+            action = 'ok'
         ##//Check the front_right sensor
-        elif front_right > 0.3 and action != 'ok' :
+        elif front_right > 0.9 and action != 'ok' :
             right_speed = speed * -1.0
             left_speed = speed * -1.0
-            action = 0
+            action = 'ok'
 
 ##//--------- EVASIVE MANEUVER ------------------            
        
@@ -189,20 +193,20 @@ def control(front_right, front_left, back_right, back_left, distance_right, dist
                     inicio = 'turnL'
             
             if inicio == 'turnR' :
-                if count < 25 :
-                    right_speed = speed * -0.1
+                if count < 27 :
+                    right_speed = speed * -0.3
                     left_speed = speed * -1.0
-                elif count < 50 :
+                elif count < 63 :
                     right_speed = speed * 1.0
                     left_speed = speed * -1.0  
                 else :
                     inicio = 'keepTurn'
             
             elif inicio == 'turnL' :
-                if count < 25 :
+                if count < 27 :
                     right_speed = speed * -1.0
-                    left_speed = speed * -0.1
-                elif count < 50 :
+                    left_speed = speed * -0.3
+                elif count < 63 :
                     right_speed = speed * -1.0
                     left_speed = speed * 1.0
                 else :
@@ -225,11 +229,14 @@ def control(front_right, front_left, back_right, back_left, distance_right, dist
             action = 'ok'
             count = 0
         
-        ##//counterattack (PODE MUDAR DE ESTRATÉGIA NO MEIO DA LUTA OU EXECUTAR UMA FUNÇÃO PRÓPRIA DA ESTRATÉGIA 2   
-        elif action == 'attack' : ##(NESTE CASO, OPTEI POR MUDAR PARA A ESTRATÉGIA 1)
-            strategy = 1
-            count = 10
-            inicio = 'e'
+        ##//counterattack (PODE MUDAR DE ESTRATÉGIA NO MEIO DA LUTA OU EXECUTAR UMA FUNÇÃO PRÓPRIA DA ESTRATÉGIA 2)   
+        elif action == 'attack' : 
+            if enemyPos == 2:
+                right_speed = speed * 0.8
+                left_speed = speed * 1.0
+            elif enemyPos == 0:
+                right_speed = speed * 1.0
+                left_speed = speed * 0.8
                             
         ##//if the enemy's position is '2', then the last position is 'right'     
         elif enemyPos == 2 :
@@ -240,7 +247,25 @@ def control(front_right, front_left, back_right, back_left, distance_right, dist
         elif enemyPos == 0 :
             left_speed = speed*(error/300)
             right_speed = speed*-(error/300)            
-                       
+
+            
+#####  #####  ####   #####  #####  #####  #####  #   #  #####
+#        #    #   #  #   #    #    #      #       # #      ##
+#####    #    ####   #####    #    ####   #  ##    #    ##### 
+    #    #    #  #   #   #    #    #      #   #    #       ## 
+#####    #    #   #  #   #    #    #####  #####    #    ##### 
+            
+    elif strategy == 3 :
+        right_speed = speed * 0.3
+        left_speed = speed * 0.9
+        count = count + 1
+        if count >= 80:
+            strategy = random.randint(1,2)
+            if strategy == 1:
+                inicio = 'e'
+                count = 10
+            else :
+                action == 'attack'
         
 ##//OUTPUTS
     return { 
