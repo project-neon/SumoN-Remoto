@@ -11,7 +11,7 @@ It will be updated following the structure:
     - Anhanga
     - BETONeon (NeonTestes)
     - Fiolherme
-    - Rakete (python/javascript)
+    - RAKETE (python/javascript)
     - Robobson
     - champion-II
     
@@ -23,3 +23,6 @@ It will be updated following the structure:
 
 - Challenge attempts and media
     - Festa Junina o/
+
+- Highlights
+    - RAKETE: Initial recuum coming out of the enemy's vision and optimized search near the edges to reach the entire dojo
