@@ -17,7 +17,7 @@ error = 0           ##//error for strategy #2 // variável de 'erro' utilizada n
 action = 0          ##//action to complement strategy #2 // variável de 'ação' utilizada na estratégia  #2
 
 
-def start2back(value3):
+def start(value3):
     global left_speed, right_speed
     if value3 == 1:
         ##//go to te back // vai para trás
@@ -171,7 +171,7 @@ def control(front_right, front_left, back_right, back_left, distance_right, dist
 
     if strategy == 1:
         if inicio == 'start':
-            left_speed, right_speed = start2back(1)
+            left_speed, right_speed = start(1)
             inicio = 'neutral'
             return {'leftSpeed': left_speed, 'rightSpeed': right_speed}
         if count > 7:
@@ -186,7 +186,7 @@ def control(front_right, front_left, back_right, back_left, distance_right, dist
     elif strategy == 2:
         enemyPos, error = enemyPosition (distance_left, distance_right, 2)
         if inicio == 'start' :
-            left_speed, right_speed = start2back(2)
+            left_speed, right_speed = start(2)
             inicio = 'neutral'
         elif (back_right > 0.9 or back_left > 0.9 or front_left > 0.9 or front_right > 0.9) and action != 'ok': ##//check the sensors // verifica os sensores
             left_speed, right_speed = sensors(front_left, front_right, back_left, back_right, 2)
