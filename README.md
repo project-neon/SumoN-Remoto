@@ -28,7 +28,12 @@ It will be updated following the structure:
     - Initial retreat/back up from enemy
 
 - Challenge attempts and media
-    - Festa Junina o/
+    - Festa Junina o/ (Junina Party! \o)
+    
+
+https://user-images.githubusercontent.com/32942751/126215638-ef477d3d-30db-4f6c-8fca-0dfd653fa753.mp4
+
+
 
 - Highlights
     - RAKETE: Initial recuum coming out of the enemy's vision and optimized search near the edges to reach the entire dojo
