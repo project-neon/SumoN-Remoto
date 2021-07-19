@@ -10,6 +10,12 @@ It will be updated following the structure:
 
     - Anhanga
     - BETONeon (NeonTestes)
+        Beto's code main function is a simple makeover of Roboton's [search tutorial](https://roboton.io/tutorial/sumo-search?language_id=python) code, stacked with a "line-danger" reading function to avoid falling by itself, and with the **main feature of a retreat/'back-up' routine** at the very start of the control program, followed by a conditional of the previous function (is it safe to move forwards?) then writing speeds to the motors according to the improved search function ('searchEngine'). It can be seen here below on the preview animation:  
+
+        ![BETONeon-ftr](https://github.com/project-neon/SumoN-Remoto/blob/roboton-III-2021/media/betoneonftr1.gif)
+
+
+
     - Fiolherme
     - RAKETE (python/javascript)
     - Robobson
