@@ -5,6 +5,17 @@
 #   #   ###   #   #  #####    #      #     ###
 import random
 
+sInitial = 0        ##//initial distance // distância inicial 
+sFinal = 0          ##//final distance // distância final  
+tInitial = 0        ##//initial time // tempo inicial
+tFinal = 0          ##//final time // tempo final
+speedOp = 0         ##//opponent's speed in 'm/s' (meters per second) // velocidade do oponente em 'm/s' (metros por segundo)
+timer = 0.0166667   ##//time in seconds -> (1/60=0,01667)* // tempo em segundos -> (1/60=0,01667)*
+##// *OBS: The program runs 60 times per second. Therefore, each cycle is equivalent to 1/60 seconds. // O programa é executado 60 vezes por segundo. Logo, cada ciclo equivale á 1/60 segundos.
+
+value = 0           ##//variable to calculate impact time // Variável para calcular o tempo de impacto
+
+
 inicio = 'select'   ##//initial condition, 'start', 'neutral', 'start' // 'start' = condição inicial, 'neutral' = neutro, 'select' = selecionar estratégia
 left_speed = 0      ##//motor's variables // variáveis dos motores
 right_speed = 0     ##//motor's variables // variáveis dos motores
@@ -16,6 +27,22 @@ strategy = 0        ##//selected strategy // estratégia selecionada
 error = 0           ##//error for strategy #2 // variável de 'erro' utilizada na estratégia #2
 action = 0          ##//action to complement strategy #2 // variável de 'ação' utilizada na estratégia  #2
 
+def whatsTheSpeed (distance_left, distance_right):
+    global sInitial, sFinal, tInitial, tFinal, speedOp, timer
+   
+    if distance_left > distance_right: ##//Choose which is the shortest distance // Escolhe qual é a menor distância
+        sInitial = distance_right/100 ##//Transforms measure 'cm' into 'm' (meters) // Transforma a medida 'cm' em 'm' (metros)
+    else:
+        sInitial = distance_left/100 ##//Transforms measure 'cm' into 'm' (meters) // Transforma a medida 'cm' em 'm' (metros)
+    tFinal = timer ##// Changes the value of variable 'tFinal' to the current time value // Muda o valor da variável 'tFinal' para o valor de tempo atual
+    if sFinal == 0: ##// The first time, the value of 'sFinal' and 'sInitial' must be equal // Na primeira vez, o valor de 'sFinal' e 'sInitial' devem ser iguais
+        sFinal = sInitial
+    speedOp = (sFinal - sInitial)/(tFinal - tInitial) ##// Calculating the enemy's current speed // Cálculo da velocidade atual do inimigo
+    ##// Updates the variables 'tInitial', 'sFinal' and 'timer' for the next calculation // Atualiza as variáveis 'tInitial', 'sFinal' e 'timer' para o próximo cálculo
+    tInitial = tFinal
+    sFinal = sInitial
+    timer += 0.0166667 ##// Increment of 0.0166667 seconds to keep the variable in the 'seconds' unit // Incremento de 0.0166667 segundos para manter a variável na unidade dos 'segundos'
+    return speedOp
 
 def start(value3):
     global left_speed, right_speed
@@ -164,7 +191,8 @@ def evasiveManeuver(distance_left, distance_right, value5):
 def control(front_right, front_left, back_right, back_left, distance_right, distance_left):
 
     global inicio, left_speed, right_speed, speed, enemyPos, last, count, strategy, error, action
-
+    global speedOp, value
+    
     if inicio == 'select':  ##//randomly select strategy // escole a estratégia aleatoriamente
         strategy = random.randint(1, 3)
         inicio = 'start'
@@ -184,6 +212,9 @@ def control(front_right, front_left, back_right, back_left, distance_right, dist
         count += 1
 
     elif strategy == 2:
+        
+     
+        
         enemyPos, error = enemyPosition (distance_left, distance_right, 2)
         if inicio == 'start' :
             left_speed, right_speed = start(2)
@@ -193,9 +224,24 @@ def control(front_right, front_left, back_right, back_left, distance_right, dist
             action = 'ok'
         elif action == 'ok':
             left_speed, right_speed, action, count = evasiveManeuver(distance_left, distance_right, count)
-        elif distance_left < 50 and action == 0: ##//ROKETTO!! Evasive maneuver!! ref: POKÉMON
-            action = 'ok'
-            count = 0 
+
+        
+        ##//function to perform evasive maneuver based on enemy speed // função para executar a manobra evasiva com base na velocidade do inimigo 
+        elif distance_left < 60: ##// minimum distance to start checking // distância mínima para o início da verificação
+            speedOp = whatsTheSpeed(distance_left, distance_right) ##// calculating the enemy's current speed // calcula a velocidade atual do inimigo
+            if speedOp > 0: 
+                ##//calculates the impact time // calcula o tempo para o impacto
+                if distance_left < distance_right: ##//selects the side with the shortest distance // seleciona o lado com a menor distância
+                    value = (distance_left/100) / speedOp 
+                else:
+                    value = (distance_right/100) / speedOp
+                if value <= 0.2 and action == 0: ##// Performs evasive maneuver if impact time is less than 0.2 seconds // Executa a manobra evasiva se o tempo de impacto for menor do que 0,2 segundos
+                    action = 'ok'
+                    count = 0
+            
+
+
+
         elif action == 'attack': ##//counterattack // contra-ataque após a manobra
             if enemyPos == 2:  ##//enemy on the right // inimigo à direita
                 right_speed = speed * 0.8
@@ -216,7 +262,7 @@ def control(front_right, front_left, back_right, back_left, distance_right, dist
                 inicio = 'neutral'
                 count = 10
             else :
-                action == 'attack'
+                action = 'attack'
                 count = 0
 ##//OUTPUTS
     return {'leftSpeed': left_speed, 'rightSpeed': right_speed}
