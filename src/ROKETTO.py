@@ -1,8 +1,8 @@
-####    ###   #   #  #####  #####  #####   ###
-#   #  #   #  #  #   #        #      #    #   #
-####   #   #  ###    ####     #      #    #   #
-#  #   #   #  #  #   #        #      #    #   #
-#   #   ###   #   #  #####    #      #     ###
+####    ###   #   #  #####  #####  #####   ###            ▄    ▄▄▄▄▄▄▄    ▄
+#   #  #   #  #  #   #        #      #    #   #          ▀▀▄ ▄█████████▄ ▄▀▀
+####   #   #  ###    ####     #      #    #   #              ██ ▀███▀ ██
+#  #   #   #  #  #   #        #      #    #   #            ▄ ▀████▀████▀ ▄
+#   #   ###   #   #  #####    #      #     ###           ▀█    ██▀█▀██    █▀
 import random
 
 strategy = random.randint(1,3)       ##//selected strategy // estratégia selecionada
@@ -17,7 +17,6 @@ timer = 1/60        ##//time in seconds -> (1/60)* // tempo em segundos -> (1/60
 
 impactTime = 0      ##//variable to calculate impact time // Variável para calcular o tempo de impacto
 
-
 inicio = 'start'    ##//initial condition, 'start', 'neutral' // 'start' = condição inicial, 'neutral' = neutro
 left_speed = 0      ##//motor's variables // variáveis dos motores
 right_speed = 0     ##//motor's variables // variáveis dos motores
@@ -28,39 +27,37 @@ error = 0           ##//error for strategy #2 // variável de 'erro' utilizada n
 action = 0          ##//action to complement strategy #2 // variável de 'ação' utilizada na estratégia  #2
 
 def whatsTheSpeed (distance_left, distance_right):
-    global sInitial, sFinal, tInitial, tFinal, speedOp, timer
+    global sInitial, sFinal, tInitial, tFinal, speedOp, timer, impactTime
    
     if distance_left > distance_right: ##//Choose which is the shortest distance // Escolhe qual é a menor distância
         sInitial = distance_right/100 ##//Transforms measure 'cm' into 'm' (meters) // Transforma a medida 'cm' em 'm' (metros)
     else:
         sInitial = distance_left/100 ##//Transforms measure 'cm' into 'm' (meters) // Transforma a medida 'cm' em 'm' (metros)
-    
-    tFinal = timer ##// Changes the value of variable 'tFinal' to the current time value // Muda o valor da variável 'tFinal' para o valor de tempo atual
+        
+    tFinal = timer ##// Changes the value of variable 'tInitial' to the current time value // Muda o valor da variável 'tInitial' para o valor de tempo atual
+ 
     speedOp = (sFinal - sInitial)/(tFinal - tInitial) ##// Calculating the enemy's current speed // Cálculo da velocidade atual do inimigo
+    
+    impactTime = sInitial / speedOp
     
     ##// Updates the variables 'tInitial', 'sFinal' and 'timer' for the next calculation // Atualiza as variáveis 'tInitial', 'sFinal' e 'timer' para o próximo cálculo
     tInitial = tFinal
     sFinal = sInitial
     timer += 1/60 ##// Increment of 1/60 seconds to keep the variable in the 'seconds' unit // Incremento de 1/60 segundos para manter a variável na unidade dos 'segundos'
     
-    return speedOp
+    return impactTime
 
-def start(value3):   
+def start(varX):   
     global left_speed, right_speed, flag
     
-    if value3 == 1:
-        ##//go to te back // vai para trás
-        left_speed = speed * -1
-        right_speed = speed * -1
-    else:
-        left_speed = speed * 1
-        right_speed = speed * 0
-        flag = 2
-        
-    return left_speed, right_speed
+    left_speed = (-2) * speed * varX + speed
+    right_speed = (-1) * speed * varX
+    flag = 2 - varX
+    
+    return left_speed, right_speed, flag
 
 def sensors(front_left, front_right, back_left, back_right):
-    global left_speed, right_speed
+    global left_speed, right_speed, flag
    
     ##//if the back_sensor > 0.5, go to the foward // se o sensor traseiro da esquerda for > 0.5 vai pra frente
     if back_left > 0.5:
@@ -71,10 +68,12 @@ def sensors(front_left, front_right, back_left, back_right):
         ##//turn to the left // gira para a esquerda
         left_speed = speed * -0.984
         right_speed = speed * 0.984
+        flag = 0
     elif front_left > 0:
         ##//turn to the right // gira para a direita
         left_speed = speed * 0.984
         right_speed = speed * -0.984
+        flag = 2
  
     return left_speed, right_speed     
        
@@ -116,8 +115,8 @@ def moviment(distance_left, distance_right, value1):
             left_speed = speed * 1.0
             right_speed = speed * 1.0
     else:
-        right_speed = (speed*0.5)* -(error/300)+(speed*0.2)
-        left_speed = (speed*0.5) * (error/300)+(speed*0.2)       
+        right_speed = (speed*0.5) * -(error/300) + (speed*0.2)
+        left_speed = (speed*0.5) * (error/300) + (speed*0.2)       
 
     return left_speed, right_speed
 
@@ -135,7 +134,7 @@ def evasiveManeuver(distance_left, distance_right, value5):
         if value5 < 30:
             right_speed = speed * -0.4
             left_speed = speed * -1.0
-        elif value5 < 68:
+        elif value5 < 70:
             right_speed = speed * 1.0
             left_speed = speed * -1.0
         else:
@@ -143,10 +142,10 @@ def evasiveManeuver(distance_left, distance_right, value5):
             
     ##EVASIVE MANEUVER TO THE LEFT // manobra evasiva para a esquerda
     elif inicio == 'turnL':
-        if value5 < 30:
+        if value5 < 35:
             right_speed = speed * -1.0
-            left_speed = speed * -0.4
-        elif value5 < 68:
+            left_speed = speed * -0.3
+        elif value5 < 60:
             right_speed = speed * -1.0
             left_speed = speed * 1.0
         else:
@@ -158,11 +157,11 @@ def evasiveManeuver(distance_left, distance_right, value5):
 
 def control(front_right, front_left, back_right, back_left, distance_right, distance_left):
 
-    global strategy, speedOp, impactTime, inicio, left_speed, right_speed, speed, flag, count, error, action
+    global strategy, impactTime, inicio, left_speed, right_speed, speed, flag, count, error, action
 
     if strategy == 1:
         if inicio == 'start':
-            left_speed, right_speed = start(1)
+            left_speed, right_speed, flag = start(1)
             inicio = 'neutral'
             return {'leftSpeed': left_speed, 'rightSpeed': right_speed}
         if count > 7:
@@ -179,7 +178,7 @@ def control(front_right, front_left, back_right, back_left, distance_right, dist
         flag, error = enemyPosition (distance_left, distance_right)
         
         if inicio == 'start' :
-            left_speed, right_speed = start(2)
+            left_speed, right_speed, flag = start(0)
             inicio = 'neutral'
         elif (back_right > 0.9 or back_left > 0.9 or front_left > 0.9 or front_right > 0.9) and action != 'ok': ##//check the sensors // verifica os sensores
             left_speed, right_speed = sensors(front_left, front_right, back_left, back_right)
@@ -189,22 +188,14 @@ def control(front_right, front_left, back_right, back_left, distance_right, dist
 
             ##//function to perform evasive maneuver based on enemy speed // função para executar a manobra evasiva com base na velocidade do inimigo 
         elif distance_left < 60: ##// minimum distance to start checking // distância mínima para o início da verificação
-            speedOp = whatsTheSpeed(distance_left, distance_right) ##// calculating the enemy's current speed // calcula a velocidade atual do inimigo
-            if speedOp > 0: 
-                ##//calculates the impact time // calcula o tempo para o impacto
-                if distance_left < distance_right: ##//selects the side with the shortest distance // seleciona o lado com a menor distância
-                    impactTime = (distance_left/100) / speedOp 
-                else:
-                    impactTime = (distance_right/100) / speedOp
-                
-                if impactTime <= 0.2 and action == 0: ##// Performs evasive maneuver if impact time is less than 0.2 seconds // Executa a manobra evasiva se o tempo de impacto for menor do que 0,2 segundos
+            impactTime = whatsTheSpeed(distance_left, distance_right)
+            if impactTime > 0 and impactTime < 0.2 and action == 0: ##// Performs evasive maneuver if impact time is less than 0.2 seconds // Executa a manobra evasiva se o tempo de impacto for menor do que 0,2 segundos
                     action = 'ok'
         
         elif action == 'attack': ##//counterattack // contra-ataque após a manobra
-            if flag != 1:
-                right_speed = speed*0.4 * -(error/300) + speed * 0.5
-                left_speed = speed*0.4 * (error/300) + speed * 0.5
-            else:
+            right_speed = speed*0.4 * -(error/300) + (speed * 0.5)
+            left_speed = speed*0.4 * (error/300) + (speed * 0.5)
+            if error > -10 and error < 10:
                 right_speed = speed
                 left_speed = speed 
         else:
