@@ -38,7 +38,7 @@ def whatsTheSpeed (distance_left, distance_right):
  
     speedOp = (sFinal - sInitial)/(tFinal - tInitial) ##// Calculating the enemy's current speed // Cálculo da velocidade atual do inimigo
     
-    impactTime = sInitial / speedOp
+    impactTime = tFinal - tInitial
     
     ##// Updates the variables 'tInitial', 'sFinal' and 'timer' for the next calculation // Atualiza as variáveis 'tInitial', 'sFinal' e 'timer' para o próximo cálculo
     tInitial = tFinal
@@ -187,9 +187,9 @@ def control(front_right, front_left, back_right, back_left, distance_right, dist
             left_speed, right_speed, action, count = evasiveManeuver(distance_left, distance_right, count)
 
             ##//function to perform evasive maneuver based on enemy speed // função para executar a manobra evasiva com base na velocidade do inimigo 
-        elif distance_left < 60: ##// minimum distance to start checking // distância mínima para o início da verificação
+        elif distance_left < 50: ##// minimum distance to start checking // distância mínima para o início da verificação
             impactTime = whatsTheSpeed(distance_left, distance_right)
-            if impactTime > 0 and impactTime < 0.2 and action == 0: ##// Performs evasive maneuver if impact time is less than 0.2 seconds // Executa a manobra evasiva se o tempo de impacto for menor do que 0,2 segundos
+            if impactTime < 0.1 and action == 0: ##// Performs evasive maneuver if impact time is less than 0.2 seconds // Executa a manobra evasiva se o tempo de impacto for menor do que 0,2 segundos
                     action = 'ok'
         
         elif action == 'attack': ##//counterattack // contra-ataque após a manobra
