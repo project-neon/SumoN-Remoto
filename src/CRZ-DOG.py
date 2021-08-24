@@ -1,3 +1,10 @@
+"""
+ /﹋\
+(҂`_´)
+<,︻╦╤─ ҉ - CRZ-DOG - ҉
+/﹋\
+"""
+
 left_speed = 0      # velocidade da roda esquerda
 right_speed = 0     # velocidade da roda direita
 speed = 40          # velocidade máxima
