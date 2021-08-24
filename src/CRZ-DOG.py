@@ -14,39 +14,39 @@ def ctrl(distance_right, distance_left): # função para posicionar o robô na d
     
     erro = (distance_left - distance_right) #erro positivo: inimigo á direita    erro negativo: inimigo á esquerda
     
-    if erro == 0: #isso ocorre quando perdemo o inimigo de vista
+    if erro == 0: #isso ocorre quando perdemos o inimigo de vista
         if distance_left >= 300:
             if flag == 0:   #procura pela direita
-                left_speed = speed
-                right_speed = -speed
+                left_speed = speed*0.8
+                right_speed = -speed*0.8
             else:           #procura pela esquerda
-                left_speed = -speed
-                right_speed = speed
+                left_speed = -speed*0.8
+                right_speed = speed*0.8
     else:
         if erro > 0 : #muda o valor da flag de acordo com o valor do erro
             flag = 0
         if erro < 0 : 
             flag = 1
-        #movimenta o robô proporcionalmente ao valor de erro calculado
-        left_speed = (speed*0.5) * (erro)/300 + (speed*0.4) 
-        right_speed = (speed*0.5) * -(erro)/300 + (speed*0.4)
+        #movimenta o robô proporcionalmente ao valor do erro calculado
+        left_speed = (speed*0.5) * (erro)/300 + (speed*0.5) 
+        right_speed = (speed*0.5) * -(erro)/300 + (speed*0.5)
     
     return left_speed, right_speed,erro,flag
 
 def manobra(var): #função para acelerar aos poucos, para diminuir a chance de ser "rampado"
     global left_speed, right_speed, count
     
-    if var == 2: #primeiro estágio da aceleração
-        left_speed = speed*0.9
-        right_speed = speed*0.9
+    if var == 2: #primeiro estágio da aceleração 70%
+        left_speed = speed*0.7
+        right_speed = speed*0.7
         count = count+1
         
-    if count >40: #segundo estágio da aceleração
+    if count >25: #segundo estágio da aceleração 100%
         left_speed = speed
         right_speed = speed
         count = count+1
      
-    if count > 60: #reset da função
+    if count > 30: #reset da função
         var = 'atk'
         count = 1
         
@@ -63,25 +63,13 @@ def control(front_right, front_left, back_right, back_left, distance_right, dist
     if var == 2:
         left_speed, right_speed,var,count = manobra(var) # chamada da função "manobra"
         
-    
     if erro > -margem and erro < margem and distance_left < 300 and var == 'atk': # ataca quando já foi executado a "manobra"
         left_speed = speed
-        right_speed = speed
+        right_speed = speed*0.5*(-1)*(erro/300)+speed
     
     if front_left > 0.8 or front_right > 0.8: # uso dos sensores para evitar a queda da arena
         left_speed = -speed
         right_speed = -speed
-   
         
 ##//OUTPUTS
-    return {'leftSpeed': left_speed, 'rightSpeed': right_speed
-           #'log': [ 
-        
-          # { 'name': 'count',  'value':   count,    'min': 0, 'max': 120 },
-          # { 'name': 'meio', 'value':   0,   'min': -300, 'max': 300 }
-          # { 'name': 'flag', 'value':   flag,   'min': -1, 'max': 2 },
-          # { 'name': 'speed', 'value':   left_speed,   'min': -40, 'max': 40 }
-          # { 'name': 'Distance Left', 'value': distance_left, 'min': 0, 'max': 300 }
-        
-        #]
-           }
+    return {'leftSpeed': left_speed, 'rightSpeed': right_speed}
