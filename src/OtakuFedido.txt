@@ -1,0 +1,85 @@
+etapa = 0
+motor_dir = 0
+motor_esq = 0
+count=0
+rampa = True
+
+
+
+def control(front_right, front_left, back_right, back_left, distance_right, distance_left):
+    global motor_dir
+    global motor_esq
+    global etapa
+    
+    
+    
+    
+    
+    if front_right < 0.25 and front_left < 0.25: # se não estiver rampado
+        if etapa == 0:
+            if distance_right == 300: ## gira e procura oponente
+                motor_dir = -40
+                motor_esq = 40
+                etapa = 1
+            
+        elif distance_right < 300 and distance_left == 300: ## alinha acelerando esquerdo
+            motor_dir = -25
+            motor_esq = 39.999
+        elif distance_right == 300 and distance_left < 300: ## alinha acelerando direita
+            motor_dir = 39.999
+            motor_esq = -25
+        
+    elif front_left > 0.125 and front_right > 0.125:
+        if back_left == 0.25 or back_right == 0.25:
+            motor_dir = 40
+            motor_esq = 40
+        else:
+            motor_dir = -40
+            motor_esq = 40
+    
+            
+    """
+    elif front_right == 0.25 or front_left == 0.25:  ## tá em cima do outro
+        motor_dir = -40
+        motor_esq = -20   
+    elif front_right == 0.25 or front_left < 0.25:  ## tá em cima so direita
+        motor_dir = -40
+        motor_esq = -20   
+    elif front_right < 0.25 or front_left == 0.25:  ## tá em cima so esquerda
+        motor_dir = -20
+        motor_esq = -40 
+    
+    elif back_right == 0.25 or back_left < 0.25:  ## tá em cima so direita
+        motor_dir = -40
+        motor_esq = -20   
+    elif back_right < 0.25 or back_left == 0.25:  ## tá em cima so esquerda
+        motor_dir = -20
+        motor_esq = -40 
+    elif back_right == 0.25 or back_left == 0.25:  ## tá em cima do outro
+        motor_dir = -40
+        motor_esq = -40
+    elif back_right < 0.12 or back_left < 0.12 or front_right < 0.12 and front_left < 0.12:
+        motor_dir = 40
+        motor_esq = -40
+    elif back_right < front_right and back_left < front_left: 
+        motor_dir = 40
+        motor_esq = -40       
+    """    
+    #else:
+     #   motor_dir = 0
+      #  motor_esq = 40
+        
+    
+    
+    right_speed = motor_dir
+    left_speed = motor_esq
+    
+    return {
+        'leftSpeed': left_speed,
+        'rightSpeed': right_speed,
+        'log': [
+            { 'name': 'Front Left',  'value':   front_left,    'min': 0, 'max': 1 },
+            { 'name': 'Front Right', 'value':   front_right,   'min': 0, 'max': 1 },
+            { 'name': 'Distance Left', 'value': distance_left, 'min': 0, 'max': 300 }
+        ]
+    }
